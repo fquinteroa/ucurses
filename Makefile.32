@@ -1,0 +1,35 @@
+#//////////////////////////////////////////
+# File: Make file for UPOS Provider
+# Author: Fernando Quintero
+#
+# Modified By:
+#
+#//////////////////////////////////////////
+
+OBJECTS =  ucurses.o
+EXECUTABLE = libucurses.so.1.0
+EXTRALIBS = -lncurses -lform -lmenu -lpanel
+
+
+all: $(OBJECTS) $(EXECUTABLE)
+
+$(OBJECTS): %.o: %.cpp %.h
+	g++ -Wall -c ucurses.cpp
+	ar -cvq libucurses.a ucurses.o
+	g++ -Wall -fpic -c ucurses.cpp
+	g++ -shared -o libucurses.so.1.0 ucurses.o
+
+#$(EXECUTABLE): $(OBJECTS)
+#	g++ $(LDFLAGS)  $(OBJECTS) $(EXTRALIBS) -o $@
+
+install:
+	cp libucurses.so.1.0 /usr/lib
+	cp libucurses.a /usr/lib        
+	ln -sf /usr/lib/libucurses.so.1.0 /usr/lib/libucurses.so.1
+	ln -sf /usr/lib/libucurses.so.1.0 /usr/lib/libucurses.so
+	cp ucurses.h /usr/include
+
+clean:
+	$(RM) *.o
+
+
